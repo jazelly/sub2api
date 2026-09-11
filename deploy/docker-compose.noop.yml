@@ -1,0 +1,12 @@
+# Build the Noop relay from this checkout while retaining the base stack's data.
+# Run with: docker compose -f docker-compose.yml -f docker-compose.noop.yml up -d --build
+services:
+  sub2api:
+    image: noop-sub2api:local
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports: !override
+      - "${BIND_HOST:-127.0.0.1}:${SERVER_PORT:-55250}:8080"
+    environment:
+      RUN_MODE: simple
