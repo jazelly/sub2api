@@ -1,7 +1,7 @@
 # Noop relay
 
 `noop` is the maintained deployment branch. `main` follows the original project;
-upstream changes are selected into `noop` explicitly.
+upstream changes are synced into `main`, then `noop` is rebased onto `main`.
 
 Build the relay from this checkout using the existing PostgreSQL and Redis
 stack. Keep the same Compose project name and private environment file when
