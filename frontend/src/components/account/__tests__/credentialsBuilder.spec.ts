@@ -452,17 +452,17 @@ describe('plan_type helpers', () => {
   describe('planTypeDisplayLabel', () => {
     it('maps canonical + alias values to friendly labels', () => {
       expect(planTypeDisplayLabel('plus')).toBe('Plus')
-      expect(planTypeDisplayLabel('pro')).toBe('Pro 200')
-      expect(planTypeDisplayLabel('chatgptpro')).toBe('Pro 200')
-      expect(planTypeDisplayLabel('prolite')).toBe('Pro 100')
+      expect(planTypeDisplayLabel('pro')).toBe('Pro 10x')
+      expect(planTypeDisplayLabel('chatgptpro')).toBe('Pro 10x')
+      expect(planTypeDisplayLabel('prolite')).toBe('Pro 5x')
       expect(planTypeDisplayLabel('free')).toBe('Free')
       expect(planTypeDisplayLabel('team')).toBe('Business')
       expect(planTypeDisplayLabel('self_serve_business_prolite')).toBe('Business Premium')
     })
     it('normalizes case, separators and surrounding blanks', () => {
-      expect(planTypeDisplayLabel('CHATGPTPRO')).toBe('Pro 200')
-      expect(planTypeDisplayLabel('PROLITE')).toBe('Pro 100')
-      expect(planTypeDisplayLabel('  Pro Lite  ')).toBe('Pro 100')
+      expect(planTypeDisplayLabel('CHATGPTPRO')).toBe('Pro 10x')
+      expect(planTypeDisplayLabel('PROLITE')).toBe('Pro 5x')
+      expect(planTypeDisplayLabel('  Pro Lite  ')).toBe('Pro 5x')
       expect(planTypeDisplayLabel('self-serve-business-pro-lite')).toBe('Business Premium')
     })
     it('returns unknown values verbatim', () => {
@@ -487,9 +487,9 @@ describe('plan_type helpers', () => {
     it('includes all current SKUs with their status labels', () => {
       const opts = buildPlanTypeOptions('', 'Clear')
       expect(opts[0]).toEqual({ value: '', label: 'Clear' })
-      expect(opts).toContainEqual({ value: 'prolite', label: 'Pro 100' })
-      expect(opts).toContainEqual({ value: 'pro', label: 'Pro 200' })
-      expect(opts).toContainEqual({ value: 'promax', label: 'Pro 500' })
+      expect(opts).toContainEqual({ value: 'prolite', label: 'Pro 5x' })
+      expect(opts).toContainEqual({ value: 'pro', label: 'Pro 10x' })
+      expect(opts).toContainEqual({ value: 'promax', label: 'Pro 25x' })
       expect(opts).toContainEqual({ value: 'edu_plus', label: 'Edu Plus' })
       expect(opts).toContainEqual({ value: 'edu_pro', label: 'Edu Pro' })
       expect(opts).toContainEqual({ value: 'enterprise_cbp_automation', label: 'Enterprise (Automation)' })
@@ -545,7 +545,7 @@ describe('Codex subscription analytics labels', () => {
     ['business', 'Business'], ['self_serve_business_prolite', 'Business'],
     ['enterprise_cbp_automation', 'Enterprise'], ['ent26', 'Enterprise'],
     ['edu', 'Education'], ['edu_plus', 'Education'], ['edu_pro', 'Education'],
-    ['unknown', 'Account'], ['promax', 'Pro 500']
+    ['unknown', 'Account'], ['promax', 'Pro 25x']
   ])('groups %s without changing its status label', (sku, label) => {
     expect(openAIPlanTypeLabel(sku, 'analytics')).toBe(label)
   })

@@ -503,7 +503,7 @@ export interface PlanTypeOption {
 /**
  * plan_type 值的友好显示标签（ChatGPT 档位命名）。
  * 与 PlatformTypeBadge 共用 openAIPlanTypeLabel，避免两处映射漂移；
- * canonical 值 chatgptpro 显示为 Pro 200，team 显示为 Business。未知值原样返回。
+ * canonical 值 chatgptpro 显示为 Pro 10x，team 显示为 Business。未知值原样返回。
  */
 export function planTypeDisplayLabel(value: string): string {
   return openAIPlanTypeLabel(value) || value

@@ -19,22 +19,22 @@ function mountPlan(platform: AccountPlatform, planType: string) {
 }
 
 describe('PlatformTypeBadge ChatGPT plan tiers', () => {
-  it('labels pro / chatgptpro as Pro 200 with the Pro color', () => {
+  it('labels pro / chatgptpro as Pro 10x with the Pro color', () => {
     for (const planType of ['pro', 'chatgptpro', 'PRO']) {
       const wrapper = mountPlan('openai', planType)
 
-      expect(wrapper.text()).toContain('Pro 200')
+      expect(wrapper.text()).toContain('Pro 10x')
       expect(wrapper.html()).toContain('bg-violet-100')
     }
   })
 
-  it('labels prolite as Pro 100 sharing the Pro color', () => {
+  it('labels prolite as Pro 5x sharing the Pro color', () => {
     for (const planType of ['prolite', 'PROLITE', 'pro_lite']) {
       const wrapper = mountPlan('openai', planType)
 
-      expect(wrapper.text()).toContain('Pro 100')
+      expect(wrapper.text()).toContain('Pro 5x')
       expect(wrapper.html()).toContain('bg-violet-100')
-      expect(wrapper.text()).not.toContain('Pro 200')
+      expect(wrapper.text()).not.toContain('Pro 10x')
     }
   })
 
@@ -78,12 +78,12 @@ describe('PlatformTypeBadge ChatGPT plan tiers', () => {
   })
 
   it('does not apply the ChatGPT tier naming to other platforms', () => {
-    // Antigravity 的 Pro 与 Grok 的 pro 是各自产品线的档位，不能显示成 Pro 200。
+    // Antigravity 的 Pro 与 Grok 的 pro 是各自产品线的档位，不能显示成 Pro 10x。
     for (const platform of ['antigravity', 'grok'] as AccountPlatform[]) {
       const wrapper = mountPlan(platform, 'pro')
 
       expect(wrapper.text()).toContain('Pro')
-      expect(wrapper.text()).not.toContain('Pro 200')
+      expect(wrapper.text()).not.toContain('Pro 10x')
     }
 
     const antigravityTeam = mountPlan('antigravity', 'team')
@@ -94,7 +94,7 @@ describe('PlatformTypeBadge ChatGPT plan tiers', () => {
 
 describe('new Codex subscription labels', () => {
   it.each([
-    ['promax', 'Pro 500', 'bg-violet-100'],
+    ['promax', 'Pro 25x', 'bg-violet-100'],
     ['go', 'Go', ''],
     ['ent26', 'Enterprise', 'bg-indigo-100'],
     ['enterprise_cbp_automation', 'Enterprise (Automation)', 'bg-indigo-100'],
