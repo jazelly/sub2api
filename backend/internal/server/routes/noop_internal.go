@@ -51,12 +51,14 @@ func RegisterNoopInternalRoutes(
 					Name:    req.Name,
 					GroupID: groupID,
 				})
-				if err != nil {
+				if createErr := err; createErr != nil {
 					// A concurrent request can create the same named key between
 					// search and create. Return that key instead of minting another.
 					key, err = findNoopUserAPIKey(c, apiKeyService, subject.UserID, req.Name)
 					if err != nil || key == nil {
-						c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to provision Noop user API key"})
+						c.JSON(http.StatusInternalServerError, gin.H{
+							"error": "failed to provision Noop user API key: " + createErr.Error(),
+						})
 						return
 					}
 				}

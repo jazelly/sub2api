@@ -14,7 +14,9 @@ docker compose --env-file /path/to/private/runtime.env -p noop-sub2api \
 
 Run from `deploy/`. The override binds the application to loopback by default
 and uses `RUN_MODE=simple`: Sub2API records usage without charging a customer
-balance. Noop Payment owns customer credit settlement.
+balance. Noop Payment owns customer credit settlement. It also disables the
+upstream per-user API key create caps (`API_KEY_CREATE_*`), because every Noop
+user key is provisioned under the single relay service user.
 
 Use the built-in OpenAI OAuth transport. No transport plugin is required.
 Create an OpenAI OAuth account in the admin console, complete the authorized
