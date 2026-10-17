@@ -13,14 +13,21 @@ docker compose --env-file /path/to/private/runtime.env -p noop-sub2api \
 ```
 
 Run from `deploy/`. The override binds the application to loopback by default
-and uses `RUN_MODE=simple`: Sub2API records usage without charging a customer
-balance. Noop Payment owns customer credit settlement. It also disables the
-upstream per-user API key create caps (`API_KEY_CREATE_*`), because every Noop
-user key is provisioned under the single relay service user.
+and uses `RUN_MODE=standard`, which Composite groups require. Every Noop user
+key is provisioned under the single relay service user, so:
+
+- Bind the relay service key to one `composite` group containing every upstream
+  account; provisioned user keys inherit that group and route by model.
+- Set the service user's balance far above expected spend (an operational
+  meter; Noop Payment owns customer credit settlement). At zero, every relay
+  request fails.
+- Raise the service user's concurrency; it is shared by all Noop users.
+- The override disables the upstream per-user API key create caps
+  (`API_KEY_CREATE_*`).
 
 Use the built-in OpenAI OAuth transport. No transport plugin is required.
 Create an OpenAI OAuth account in the admin console, complete the authorized
-account login, and create a relay API key in the same OpenAI group. The relay
+account login, add it to the Composite group, and create the relay API key in that group. The relay
 key belongs on the Noop backend, never in the web client or user sandbox.
 
 Leave the account proxy empty for direct upstream access. To use an existing

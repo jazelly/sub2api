@@ -11,7 +11,7 @@ services:
     ports: !override
       - "${BIND_HOST:-127.0.0.1}:${SERVER_PORT:-55250}:8080"
     environment:
-      RUN_MODE: simple
+      RUN_MODE: standard
       # Every Noop user key is created under the single relay service user, so
       # the upstream per-user key caps would block provisioning past 200 users.
       API_KEY_CREATE_MAX_ACTIVE_PER_USER: "0"
