@@ -1227,6 +1227,8 @@ func (s *PricingService) GetModelPricing(modelName string) *LiteLLMModelPricing 
 // 变体、去掉日期/版本后缀后的同名条目。它刻意不包含 matchByModelFamily /
 // matchOpenAIModel 这类按子串猜系列的兜底——那些兜底会给任意名字都返回一个价格。
 // 调用方必须持有 s.mu 读锁。
+var claudeDottedVersionPattern = regexp.MustCompile(`(\d)\.(\d)`)
+
 func (s *PricingService) lookupIdentifiedModelPricingLocked(lookupCandidates []string) *LiteLLMModelPricing {
 	if len(lookupCandidates) == 0 {
 		return nil
@@ -1247,6 +1249,16 @@ func (s *PricingService) lookupIdentifiedModelPricingLocked(lookupCandidates []s
 	for _, candidate := range lookupCandidates {
 		normalized := strings.ReplaceAll(candidate, "-4-5-", "-4.5-")
 		if pricing, ok := s.pricingData[normalized]; ok {
+			return pricing
+		}
+	}
+
+	// GitHub Copilot spells Claude versions with dots: claude-sonnet-5.5 -> claude-sonnet-5-5
+	for _, candidate := range lookupCandidates {
+		if !strings.HasPrefix(candidate, "claude-") {
+			continue
+		}
+		if pricing, ok := s.pricingData[claudeDottedVersionPattern.ReplaceAllString(candidate, "$1-$2")]; ok {
 			return pricing
 		}
 	}

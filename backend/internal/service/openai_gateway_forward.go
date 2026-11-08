@@ -1352,6 +1352,11 @@ func shouldForwardOpenAIResponsesViaRawChatCompletions(account *Account) bool {
 		// Grok/GPT/Muse into Chat Completions.
 		return false
 	}
+	if account.IsGitHubCopilot() {
+		// Copilot is relayed through Chat Completions; Responses and Messages
+		// inbound requests use the existing Chat Completions conversion.
+		return true
+	}
 	if account.IsCNProvider() {
 		// CN 的显式协议配置优先于异步探针 Extra；adaptive 仅 DeepSeek / Kimi
 		// 有原生 Responses，GLM 回退 Chat Completions。

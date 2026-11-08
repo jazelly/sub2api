@@ -148,6 +148,9 @@ func (s *OpenAIGatewayService) openAIChatCompletionsTargetURL(account *Account) 
 	if err != nil {
 		return "", fmt.Errorf("invalid base_url: %w", err)
 	}
+	if account.IsGitHubCopilot() {
+		return buildGitHubCopilotChatCompletionsURL(validatedURL), nil
+	}
 	return buildOpenAIChatCompletionsURL(validatedURL), nil
 }
 
@@ -228,6 +231,7 @@ func (s *OpenAIGatewayService) sendCCUpstreamRequest(
 	// 官方 OpenCode / Command Code 上游收敛为规范客户端 UA：客户端透传的编程库
 	// UA 会命中其前置 Cloudflare bot 拦截（CF 1010/403），并被计入账号 403 strike。
 	applyOpenCodeUpstreamUserAgent(account, targetURL, upstreamReq.Header)
+	applyGitHubCopilotHeaders(account, upstreamReq.Header)
 
 	// 账号级请求头覆写：放在所有内置默认头（含 Grok CLI 身份头）之后应用，
 	// 使配置值获得除共享传输层强制头之外的最高优先级。

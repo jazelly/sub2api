@@ -323,6 +323,7 @@ export function platformLabel(p: string): string {
     case 'minimax': return 'MiniMax'
     case 'opencode_go': return 'OpenCode'
     case 'typesafe': return 'TypeSafe / Jev'
+    case 'github_copilot': return 'GitHub Copilot'
     case 'composite': return 'Composite'
     default: return p || 'API'
   }

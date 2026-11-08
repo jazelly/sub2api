@@ -42,3 +42,17 @@ do not rely on server-side response storage or `previous_response_id`.
 The OAuth upstream does not enforce `max_output_tokens`. Noop must use final
 provider usage for settlement and preserve its billing hold when usage is
 missing or exceeds the reserved credits.
+
+## GitHub Copilot
+
+Create a `GitHub Copilot` account (API key type) whose key is a GitHub OAuth
+token (`gho_...`, e.g. from the OpenCode `github-copilot` device login) and add
+it to the Composite group. The token is sent directly as the bearer credential
+to `https://api.githubcopilot.com/chat/completions` with the Copilot editor
+headers; such tokens cannot use the `copilot_internal/v2/token` exchange.
+
+Request Copilot models with a `github-copilot/` (or `copilot/`) prefix, for
+example `github-copilot/claude-sonnet-5.5`; the Composite group routes the
+prefix to the Copilot account and forwards the bare model ID. Chat Completions
+and Responses requests are both relayed through Copilot Chat Completions, and
+usage is billed from the model pricing catalog like any other account.

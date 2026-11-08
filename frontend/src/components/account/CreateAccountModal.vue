@@ -241,6 +241,19 @@
             <PlatformIcon platform="typesafe" size="sm" />
             TypeSafe / Jev
           </button>
+          <button
+            type="button"
+            @click="selectGitHubCopilotPlatform()"
+            :class="[
+              'flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2.5 text-sm font-medium transition-all',
+              form.platform === 'github_copilot'
+                ? 'bg-white text-gray-900 shadow-sm dark:bg-dark-600 dark:text-gray-100'
+                : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'
+            ]"
+          >
+            <PlatformIcon platform="github_copilot" size="sm" />
+            GitHub Copilot
+          </button>
         </div>
       </div>
 
@@ -4061,6 +4074,8 @@ const apiKeyBaseUrlPlaceholder = computed(() => {
       return 'https://api.x.ai/v1'
     case 'typesafe':
       return 'https://api.typesafe.ai'
+    case 'github_copilot':
+      return 'https://api.githubcopilot.com'
     default:
       return 'https://api.anthropic.com'
   }
@@ -4085,6 +4100,8 @@ const apiKeyValuePlaceholder = computed(() => {
       return 'sk-...'
     case 'typesafe':
       return 'ts-...'
+    case 'github_copilot':
+      return 'gho_...'
     default:
       return 'sk-ant-...'
   }
@@ -4297,6 +4314,12 @@ function selectTypeSafePlatform() {
   accountCategory.value = 'apikey'
   apiKeyBaseUrl.value = 'https://api.typesafe.ai'
   allowedModels.value = ['jev-latest']
+}
+function selectGitHubCopilotPlatform() {
+  form.platform = 'github_copilot'
+  form.type = 'apikey'
+  accountCategory.value = 'apikey'
+  apiKeyBaseUrl.value = 'https://api.githubcopilot.com'
 }
 // 账号类型 / 协议变更时同步默认 base url。
 watch(openCodeAccountMode, (mode, previousMode) => {
@@ -4873,6 +4896,8 @@ watch(
               ? 'https://api.x.ai/v1'
               : newPlatform === 'typesafe'
                 ? 'https://api.typesafe.ai'
+              : newPlatform === 'github_copilot'
+                ? 'https://api.githubcopilot.com'
               : 'https://api.anthropic.com'
     }
     // Clear model-related settings
@@ -5809,6 +5834,8 @@ const handleSubmit = async () => {
           ? 'https://api.x.ai/v1'
           : form.platform === 'typesafe'
             ? 'https://api.typesafe.ai'
+          : form.platform === 'github_copilot'
+            ? 'https://api.githubcopilot.com'
           : 'https://api.anthropic.com'
 
   // Build credentials with optional model mapping
