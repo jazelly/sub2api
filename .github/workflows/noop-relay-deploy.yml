@@ -1,0 +1,42 @@
+# Redeploys the Noop relay on the host that serves it. The relay runs from the
+# noop-sub2api-acceptance Compose project; its PostgreSQL and Redis containers and
+# named volumes are left untouched. Database migrations run on relay startup.
+name: Noop relay deploy
+
+on:
+  push:
+    branches: [noop]
+  workflow_dispatch:
+
+concurrency:
+  group: noop-relay-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, noop-relay]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rebuild and restart the relay
+        working-directory: deploy
+        run: |
+          docker compose -p noop-sub2api-acceptance \
+            --env-file "$HOME/.local/share/noop-sub2api-acceptance/runtime.env" \
+            -f docker-compose.yml -f docker-compose.noop.yml \
+            up -d --build --no-deps sub2api
+
+      - name: Wait for the relay to become healthy
+        run: |
+          for _ in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:55250/health >/dev/null; then
+              exit 0
+            fi
+            sleep 5
+          done
+          docker logs --tail 200 sub2api
+          exit 1

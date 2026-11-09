@@ -12,7 +12,13 @@ docker compose --env-file /path/to/private/runtime.env -p noop-sub2api \
   -f docker-compose.yml -f docker-compose.noop.yml up -d --build
 ```
 
-Run from `deploy/`. The override binds the application to loopback by default
+Run from `deploy/`. The production relay redeploys automatically: every push to
+`noop` runs `.github/workflows/noop-relay-deploy.yml` on the relay host's
+self-hosted runner (label `noop-relay`), which rebuilds and restarts only the
+`sub2api` service of the `noop-sub2api-acceptance` project; migrations apply on
+startup. Trigger it manually with `gh workflow run noop-relay-deploy.yml --ref noop`.
+
+The override binds the application to loopback by default
 and uses `RUN_MODE=standard`, which Composite groups require. Every Noop user
 key is provisioned under the single relay service user, so:
 
