@@ -88,13 +88,17 @@ func (r *CompositeRouteResolver) Resolve(ctx context.Context, groupID int64, mod
 	}
 
 	if platform, ok := DetectModelPlatform(model); ok {
+		upstreamModel := model
+		if platform == PlatformGitHubCopilot {
+			upstreamModel = stripGitHubCopilotModelPrefix(model)
+		}
 		return CompositeRouteDecision{
 			Matched:        true,
 			Source:         CompositeRouteSourceDetector,
 			GroupID:        groupID,
 			PublicModel:    model,
 			TargetPlatform: platform,
-			UpstreamModel:  model,
+			UpstreamModel:  upstreamModel,
 			Endpoint:       endpoint,
 		}, nil
 	}

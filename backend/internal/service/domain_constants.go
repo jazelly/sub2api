@@ -44,13 +44,14 @@ const (
 	PlatformAntigravity = domain.PlatformAntigravity
 	PlatformGrok        = domain.PlatformGrok
 	// 国产 OpenAI 兼容供应商（与 grok 一样经 OpenAI 网关转发）。
-	PlatformKimi       = domain.PlatformKimi
-	PlatformZhipu      = domain.PlatformZhipu
-	PlatformDeepseek   = domain.PlatformDeepseek
-	PlatformMiniMax    = domain.PlatformMiniMax
-	PlatformTypeSafe   = domain.PlatformTypeSafe
-	PlatformOpenCodeGo = domain.PlatformOpenCodeGo
-	PlatformComposite  = domain.PlatformComposite
+	PlatformKimi          = domain.PlatformKimi
+	PlatformZhipu         = domain.PlatformZhipu
+	PlatformDeepseek      = domain.PlatformDeepseek
+	PlatformMiniMax       = domain.PlatformMiniMax
+	PlatformTypeSafe      = domain.PlatformTypeSafe
+	PlatformOpenCodeGo    = domain.PlatformOpenCodeGo
+	PlatformGitHubCopilot = domain.PlatformGitHubCopilot
+	PlatformComposite     = domain.PlatformComposite
 	// PlatformKiro is retained for unsupported-platform threshold tests and legacy
 	// account rows. Scheduling-threshold evaluation never pauses kiro accounts.
 	PlatformKiro = "kiro"
